@@ -1,10 +1,12 @@
 # Social Media Tools: a set of R functions
 
+<b>get_interactions</b> The function takes a vector of tweets and a second vector with the usernames that tweeted the messages. It builds a network of retweets (if return.network="retweets"), @-mentions (if return.network="mentions"), or both (if return.network="all.interactions"). The funcion returns an edgelist (if return.graph=F -- default), but it can convert the data frame on the fly to an igraph object (if return.graph=T). Optional arguments include a thrid vector with edge atributes (edge.atribute defaults to NA), an encoding conversion to ASCII (if ascii=TRUE -- default), and an indication of the network as directional or not. As the funcion is built for Twitter data, the argument directed defaults to TRUE. The funcion can be deployed to other sources of relational data, particularly social media.
+
 <b>get_emails_text</b> The function scraps text files for email addresses within the R environment. 
 
 <b>get_emails_webpage</b> The function retrieves the email addresses listed in webpages that include email hyperlinks (if email.href=T) or the full body of the document (if email.href=F). This function takes one or multiple vectors of URLs and returns a vector with the emails found in the document (if return.df=F) or a data frame with the original URL(s) followed by emails on that page separated by columns (if return.df=T). The default arguments are return.df=F and email.href=F.
 
-<b>get_url_title</b> This function takes one or multiple vectors of URLs and returns the title of each webpage (if return.df=F) or a data frame with the original URL(s) followed by the webpage title (if return.df=T).
+<b>get_url_title</b> This function takes one or multiple vectors of URLs and returns the title of each webpage (if return.df=F) or a data frame with the original URL(s) followed by the webpage title (if return.df=T -- default).
 
 <b>get_url</b> This function resolves short URLs to their actual address.
 
