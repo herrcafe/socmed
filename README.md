@@ -11,26 +11,47 @@
 <b>get_aggieness</b> Simple classifier for agriculture-related tweets
 
 <b>get_socialmedia</b> The function takes one or multiple URLs and returns a data frame with the number of shares, likes, tweets, pins, and hits on Facebook, Twitter, Pinterest, StumbleUpon, LinkedIn, and Reddit for each URL. The resulting data frame includes the following 15 columns:
+
 <i>url</i> URL searched
+
 <i>normalized_url</i> URL returned
+
 <i>fbk_shares</i> number of Facebook shares 
+
 <i>fbk_likes</i> number of Facebook likes
+
 <i>fbk_comments</i> number of Facebook comments
+
 <i>fbk_total</i> total number of hits on Facebook 
+
 <i>fbk_clicks</i> number of Facebook clicks
+
 <i>twt_tweets</i> number of tweets on Twitter
+
 <i>rdt_score</i> Reddit score 
+
 <i>rdt_downs</i> number of downs on Reddit 
+
 <i>rdt_ups</i> number of ups on Reddit
+
 <i>rdt_comments</i> number of comments on Reddit
+
 <i>lkn_shares</i> number of LinkedIn shares
+
 <i>stu_views</i> number of StumbleUpon views
+
 <i>pin_counts</i> number of pins on Pinterest
 
 
 ---------------
+
 Author: Marco T. Bastos
+
 Date: 2014-10-08
+
 Modified: 2015-06-12
+
 Description: A Set of R Functions for Web and Social Media Analysis
+
 Imports: RCurl, XML, stringr, httr
+
