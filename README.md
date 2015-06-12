@@ -55,5 +55,5 @@ Modified: 2015-06-12
 
 Description: A Set of R Functions for Web and Social Media Analysis
 
-Imports: RCurl, XML, stringr, httr
+Imports: RCurl, XML, stringr, httr, igraph
 
