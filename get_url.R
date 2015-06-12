@@ -1,5 +1,4 @@
-get_url <-
-function(links, sleep.time=0, return.df=F){
+get_url <- function(links, sleep.time=0, return.df=F){
     final_url <- function(x) try(HEAD(x)$url)
     final_url2 <- function(x) {
         Sys.sleep(sleep.time)
