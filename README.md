@@ -1,6 +1,4 @@
-# socmed
-Social Media Tools: a set of R functions
-
+# Social Media Tools: a set of R functions
 
 <b>get_emails_text</b> The function scraps text files for email addresses within the R environment. 
 
@@ -31,9 +29,8 @@ Social Media Tools: a set of R functions
 
 
 --------------
-
-# Author: Marco T. Bastos
-# Date: 2014-10-08
-# Modified: 2015-06-12
-# Description: A Set of R Functions for Web and Social Media Analysis
-# Imports: RCurl, XML, stringr, httr
+Author: Marco T. Bastos
+Date: 2014-10-08
+Modified: 2015-06-12
+Description: A Set of R Functions for Web and Social Media Analysis
+Imports: RCurl, XML, stringr, httr
