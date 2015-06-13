@@ -1,5 +1,5 @@
 # get retweets and @-mentions
-get_interactions <- function(tweets, screenName, edge.attribute=NA, ascii=TRUE, return.network="all.interactions", return.graph=TRUE, directed=TRUE) {
+get_interactions <- function(tweets, screenName, edge.attribute=NULL, ascii=TRUE, return.network="all.interactions", return.graph=TRUE, directed=TRUE) {
     library(stringr)
     if(return.graph==TRUE) { library(igraph) }
     
@@ -16,10 +16,10 @@ get_interactions <- function(tweets, screenName, edge.attribute=NA, ascii=TRUE, 
         rt.receiver[rt.receiver==""] <- "<NA>"
 
         # create rt edge list
-        if(!is.na(edge.attribute)) {
-            edge.attribute <- edge.attribute[grep("rt @[a-zA-Z0-9_]+", tweets, perl=T)]
-            rts.df <- data.frame(sender=rt.sender, receiver=rt.receiver, edge.attribute=edge.attribute, type="retweet", stringsAsFactors=FALSE) }
-        if(is.na(edge.attribute)) { rts.df <- data.frame(sender=rt.sender, receiver=rt.receiver, type="retweet", stringsAsFactors=FALSE) }
+        if(!is.null(edge.attribute)) {
+            edge.variable <- edge.attribute[grep("rt @[a-zA-Z0-9_]+", tweets, perl=T)]
+            rts.df <- data.frame(sender=rt.sender, receiver=rt.receiver, edge.attribute=edge.variable, type="retweet", stringsAsFactors=FALSE) }
+        if(is.null(edge.attribute)) { rts.df <- data.frame(sender=rt.sender, receiver=rt.receiver, type="retweet", stringsAsFactors=FALSE) }
         rts.df <- rts.df[!is.na(rts.df$sender),]
         rts.df <- rts.df[!rts.df$sender==rts.df$receiver,]
         rownames(rts.df) <- NULL 
@@ -36,10 +36,10 @@ get_interactions <- function(tweets, screenName, edge.attribute=NA, ascii=TRUE, 
         at.sender <- rep(screenName, mention.count.0)
         
         # create edge list
-        if(!is.na(edge.attribute)) { 
-            edge.attribute <- rep(edge.attribute, mention.count.0)
-            ats.df <- data.frame(sender=at.sender, receiver=at.receiver, edge.attribute=edge.attribute, type="mention", stringsAsFactors=FALSE) }
-        if(is.na(edge.attribute)) { ats.df <- data.frame(sender=at.sender, receiver=at.receiver, type="mention", stringsAsFactors=FALSE) }
+        if(!is.null(edge.attribute)) { 
+            edge.variable <- rep(edge.attribute, mention.count.0)
+            ats.df <- data.frame(sender=at.sender, receiver=at.receiver, edge.attribute=edge.variable, type="mention", stringsAsFactors=FALSE) }
+        if(is.null(edge.attribute)) { ats.df <- data.frame(sender=at.sender, receiver=at.receiver, type="mention", stringsAsFactors=FALSE) }
         ats.df <- ats.df[!is.na(ats.df$sender),]
         ats.df <- ats.df[!ats.df$sender==ats.df$receiver,]
         rownames(ats.df) <- NULL
@@ -56,15 +56,23 @@ get_interactions <- function(tweets, screenName, edge.attribute=NA, ascii=TRUE, 
     if(return.graph==TRUE){
         if(return.network=="retweets") {
             # edgelist to graph
+            if(!is.null(rts.df$edge.attribute)) { rts.df$edge.attribute <- as.character(rts.df$edge.attribute) }
             rt.graph <- graph.data.frame(rts.df, directed=TRUE)
+            E(rt.graph)[edge.attributes(rt.graph)$type=="retweet"]$color <- "darkred"
             return(rt.graph) }
         if(return.network=="mentions") { 
             # edgelist to graph
+            if(!is.null(ats.df$edge.attribute)) { ats.df$edge.attribute <- as.character(ats.df$edge.attribute) }
             at.graph <- graph.data.frame(ats.df, directed=TRUE)
+            E(at.graph)[edge.attributes(at.graph)$type=="mention"]$color <- "darkblue"
             return(at.graph) }
         if(return.network=="all.interactions") {
             # merge retweet and @-mention data frames
             info.df <- rbind(ats.df, rts.df)
+            if(!is.null(info.df$edge.attribute)) { info.df$edge.attribute <- as.character(info.df$edge.attribute) }
             info.graph <- graph.data.frame(info.df, directed=TRUE)
+            E(info.graph)[edge.attributes(info.graph)$type=="retweet"]$color <- "darkred"
+            E(info.graph)[edge.attributes(info.graph)$type=="mention"]$color <- "darkblue"
+            #plot.igraph(info.graph,vertex.label=NA,layout=layout.fruchterman.reingold,edge.width=E(info.graph)$weight/1000,edge.arrow.size=0.1,vertex.size=1,main="")
             return(info.graph) } }
 }
