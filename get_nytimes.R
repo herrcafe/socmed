@@ -1,6 +1,9 @@
 # GET NY TIMES DATA
 
 # get ny times data that match the criteria
+library(rtimes)
+if(!"rtimes" %in% rownames(installed.packages())) { print("package rtimes is required for function get_nytimes") }
+
 get_nytimes <- function(keywords, from.date, to.date, section=NULL, api.key, sleep.time=2) {
   if(!is.null(section)) {
     facet_field <- "section_name"
