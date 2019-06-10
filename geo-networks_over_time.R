@@ -2,12 +2,12 @@
 ### geo-networks over time
 ###
 
-# install igraph 0.7.1
-# install.packages("C:/Users/bastos/OneDrive - City, University of London/Geo-networks over time/igraph_0.7.1.zip", repos=NULL)
-# install.packages("C:/Users/bastos/OneDrive - City, University of London/Geo-networks over time/igraph_0.7.1.tar.gz", repos=NULL, type="source")
-
 # set path
 path.proj <- "C:/Users/bastos/OneDrive - City, University of London/Geo-networks over time"
+
+# # install igraph 0.7.1
+# install.packages(paste0(path.proj,"/igraph_0.7.1.zip"), repos=NULL)
+# install.packages(paste0(path.proj,"/igraph_0.7.1.tar.gz"), repos=NULL, type="source")
 
 # set required packages
 req.packages <- c("reshape", "stringr", "plyr", "RCurl", "httr", "streamR", "igraph", "rgexf", "maps", "ggmap", "mapdata", "ggplot2", "visNetwork")
@@ -34,6 +34,10 @@ save(geo.df, file="geo.df.small.rda")
 geo.df$time <- as.POSIXct(geo.df$created_at, format = "%a %b %d %H:%M:%S %z %Y")
 hist(geo.df$time, breaks="hours", main="timeline", xlab="time", ylab="tweets")
 lines(density(as.integer(geo.df$time), adjust = 1, na.rm=TRUE), col="red")
+# png(file=paste0(project,"_histogram.png"), width=12,height=8, units='in', res=150)
+# hist(geo.df$time, breaks="hours", main="timeline", xlab="time", ylab="tweets")
+# lines(density(as.integer(geo.df$time), adjust = 1, na.rm=TRUE), col="red")
+# dev.off()
 
 # graph network
 geo.g <- get_interactions(tweets=geo.df$text, screenName=geo.df$screen_name, edge.attribute=geo.df$time, 
@@ -143,7 +147,7 @@ geo.g.full <- graph.data.frame(rts.df, directed=TRUE, vertices=nodes.df[,c(2,1,3
 geo.g <- induced.subgraph(geo.g.full, which(!is.na(V(geo.g.full)$latitude)))
 
 # get degree distribution
-V(geo.g)$degree <- degree(geo.g)
+V(geo.g)$degree <- igraph::degree(geo.g)
 
 # inspect graph (if igraph>0.7.1)
 visIgraph(geo.g)
@@ -160,7 +164,7 @@ if(length(topics.all)<10) {
 # color edges by hashtags
 E(geo.g)$colors <- as.character(topic.description$col.spectrum[match(gsub("#", "", E(geo.g)$edge.attribute.hashtag), topic.description$hashtag)])
 E(geo.g)$colors[is.na(E(geo.g)$colors)] <- "lightgrey"
-if(nrow(topic.description)=10) { ncol.plot <- 5 } else  {ncol.plot <- 3 }
+if(nrow(topic.description)==10) { ncol.plot <- 5 } else  {ncol.plot <- 3 }
 
 # prepare labels
 nodeLabels <- V(geo.g)$name
@@ -168,7 +172,7 @@ nodeLabels[!nodeLabels %in% names(sort(degree(geo.g),decreasing=T)[1:50])] <- ""
 latex <- matrix(c(V(geo.g)$longitude, V(geo.g)$latitude), ncol=2)
 
 # plot on a geographic grid
-png(file="geo_plot_network_small.png", type='cairo', width=20,height=20, units='in', res=300)
+png(file="geo_plot_network_small.png", type='cairo', width=30,height=20, units='in', res=300)
 map(regions = "UK", boundary = T)
 plot.igraph(geo.g,layout=layout.norm(as.matrix(data.frame(lon=V(geo.g)$longitude,lat=V(geo.g)$latitude))), rescale = FALSE, 
             xlim = c(min(V(geo.g)$longitude), max(V(geo.g)$longitude)), ylim = c(min(V(geo.g)$latitude), max(V(geo.g)$latitude)), edge.curved = TRUE, vertex.label=nodeLabels,
