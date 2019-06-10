@@ -22,12 +22,13 @@ source("get_interactions.R")
 file.to.load <- dir(paste0(path.proj, "/JSON"), full.names = T)
 geo.df <- streamR::parseTweets(file.to.load[1])
 save(geo.df, file="geo.df.rda")
+save(geo.df, file="geo.df.small.rda")
 # geo.df <- geo.df.temp <- data.frame()
 # for(u in 1:length(file.to.load)) {
 #   geo.df.temp <- streamR::parseTweets(file.to.load[u])
 #   geo.df <- rbind(geo.df, geo.df.temp)
-#   save(geo.df, file="geo.df.rda")
 # }
+# save(geo.df, file="geo.df.rda")
 
 # beat data into shape
 geo.df$time <- as.POSIXct(geo.df$created_at, format = "%a %b %d %H:%M:%S %z %Y")
